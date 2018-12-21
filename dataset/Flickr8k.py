@@ -32,9 +32,10 @@ class Flickr8k(data.Dataset):
         id = self.ids[index]
         caption = self.captions[id]
         img = self.img_loader(os.path.join(self.path['imgs'], id))
+        img = self.resize_img(img)
         if self.transform is not None:
             img = self.transform(img)
-        return id, img, caption
+        return img, caption
 
     def __len__(self):
         return len(self.ids)
@@ -112,8 +113,12 @@ if __name__ == "__main__":
     dataset = Flickr8k(transform=transforms.Compose([transforms.ToTensor()]))
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
 
+    import vgg
+    net = vgg.vgg16()
     for i, data in enumerate(dataloader, 0):
-        id, img, caption = data
+        img, caption = data
+        feature = net(img)
+        print(feature.size())
         img = img.numpy().squeeze().transpose(1, 2, 0)
         print('id: ', id)
         print('caption', caption)
