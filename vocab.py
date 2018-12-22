@@ -57,3 +57,11 @@ class Vocab():
         vec.append(self.get_id('<end>'))
         return vec
 
+    def get_sentence(self, ids_list):
+        sent = ''
+        for cur_id in ids_list:
+            cur_word = self.id2word[cur_id.item()]
+            sent += ' ' + cur_word
+            if cur_word == '<end>':
+                break
+        return sent
