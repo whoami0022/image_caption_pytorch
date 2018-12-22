@@ -52,10 +52,11 @@ data = [line.strip('\n').split() for line in f.readlines()]
 vocab = Vocab(captions_dict, threshold)
 vocab_size = vocab.id
 
-embeddings = np.zeros([vocab_size, embedding_dim])
+embeddings = np.random.uniform(-1, 1, [vocab_size, embedding_dim])
 for k in data:
     if k[0] in vocab.word2id:
         embeddings[vocab.word2id[k[0]]] = list(map(float, k[1:]))
+
 
 weights = embeddings
 with open('vocab.pkl', 'wb') as f:
@@ -91,11 +92,13 @@ for epoch in range(num_epochs):
 
             cnn_out = encoder(image)
             lstm_out = decoder(cnn_out, caption_wo_end)
+            ids_list = decoder.greedy(cnn_out, 20)
 
             loss = criterion(lstm_out, caption)
             loss.backward()
             optimizer.step()
             loss_list.append(loss)
+        print(vocab.get_sentence(ids_list))
 
     avg_loss = torch.mean(torch.Tensor(loss_list))
     print('epoch %d avg_loss %f' % (epoch, avg_loss))
