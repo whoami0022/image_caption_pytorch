@@ -26,9 +26,6 @@ def tokenizer(text): # create a tokenizer function
 
 glove_word_file = 'embedding/glove.6B.50d.txt'
 
-TEXT = data.Field(sequential=True)
-
-vectors = Vectors(name=glove_word_file)
 
 threshold = 5
 embedding_dim = 50
