@@ -57,5 +57,3 @@ class Vocab():
         vec.append(self.get_id('<end>'))
         return vec
 
-
-
